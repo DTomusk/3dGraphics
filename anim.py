@@ -15,9 +15,9 @@ origin = [canvas_width/2, canvas_height/2]
 
 # finds the positions of everything in 3d space
 def moveStuff(obj):
-	obj.translate(1,1,0)
-	obj.scale(1.001)
-	obj.rotate(math.pi/24, 0, math.pi/48)
+	obj.translate(2,0,0)
+	#obj.scale(1.001)
+	obj.rotate(math.pi/12,0,0)
 
 # converts positions to 2d and draws them (should decouple)
 def drawStuff(obj):
@@ -46,10 +46,11 @@ def drawLine(start, end):
 
 def drawPoly(obj):
 	coords = Matrix.mtimes(conversion,obj.verts)
+	Matrix.mtimes(conversion,obj.center).display()
+	drawPoint(Matrix.mtimes(conversion,obj.center).data[0])
 	for v in coords.data:
 		drawPoint(v)
 	for e in obj.edges:
-		print obj.verts.data[e[0]]
 		start = coords.data[e[0]]
 		end = coords.data[e[1]]
 		drawLine(start, end)

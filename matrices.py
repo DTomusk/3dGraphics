@@ -1,10 +1,4 @@
 import math
-# expect a list of numbers
-# do I need this? 
-class Vector:
-	def __init__(self, data):
-		self.data = data
-		self.length = len(data)
 
 class Matrix:
 	def __init__(self, data):
@@ -23,6 +17,7 @@ class Matrix:
 				row += str(self.data[j][i]) + " "
 			print row
 
+	# what would I use the determinant for? 
 	def determinant(self):
 		if self.row == self.col:
 			if self.row == 2:
@@ -37,14 +32,23 @@ class Matrix:
 	# this seems to work
 	@staticmethod
 	def mtimes(A, B):
-		if A.col != B.row:
-			print "Cannot multiply these matrices"
-			return
-		C = Matrix.zeros([A.row, B.col])
-		for i in range(A.row):
-			for j in range(B.col):
+		if isinstance(B, Matrix):
+			if A.col != B.row:
+				print "Cannot multiply these matrices"
+				return
+			C = Matrix.zeros([A.row, B.col])
+			for i in range(A.row):
+				for j in range(B.col):
+					for k in range(A.col):
+						C.data[j][i] += A.data[k][i]*B.data[j][k]
+		elif isinstance(B, list):
+			if A.col != len(B):
+				print "Cannot multiply these matrices"
+				return
+			C = Matrix.zeros([A.row, 1]) 
+			for i in range(A.row):
 				for k in range(A.col):
-					C.data[j][i] += A.data[k][i]*B.data[j][k]
+					C.data[0][i] += A.data[k][i]*B[k]
 		return C
 
 	# expect a matrix with three rows 

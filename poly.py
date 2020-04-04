@@ -24,7 +24,11 @@ class Poly:
 	# we already have all the matrix methods, so all that needs doing is calling those on verts
 
 	def translate(self, x, y, z):
+		# should translate the center 
 		self.verts = Matrix.translate(self.verts, x, y, z)
+		self.center[0] += x
+		self.center[1] += y
+		self.center[2] += z
 
 	def rotate(self, x, y, z):
 		# translate so rotating around the origin
