@@ -1,8 +1,7 @@
 from Tkinter import * 
 import math 
-import matrices
-
-Matrix = matrices.Matrix
+from matrices import Matrix
+from poly import Cube
 
 root = Tk()
 canvas_width = 800
@@ -16,7 +15,9 @@ origin = [canvas_width/2, canvas_height/2]
 
 # finds the positions of everything in 3d space
 def moveStuff(obj):
-	return Matrix.rotate(obj, 0, 0, math.pi/25)
+	obj.translate(1,1,0)
+	obj.scale(1.001)
+	obj.rotate(math.pi/24, 0, math.pi/48)
 
 # converts positions to 2d and draws them (should decouple)
 def drawStuff(obj):
@@ -31,8 +32,8 @@ def drawBG():
 def drawAxes():
 	for i in range(0, 3):
 		point = Matrix.mtimes(conversion,orientation).data[i]
-		point[0] *= 100
-		point[1] *= 100
+		point[0] *= 200
+		point[1] *= 200
 		drawLine([0,0], point)
 
 def drawPoint(point):
@@ -44,26 +45,24 @@ def drawLine(start, end):
 		origin[0]+end[0], origin[1]+end[1], fill="white")
 
 def drawPoly(obj):
-	coords = Matrix.mtimes(conversion,obj)
+	coords = Matrix.mtimes(conversion,obj.verts)
 	for v in coords.data:
 		drawPoint(v)
+	for e in obj.edges:
+		print obj.verts.data[e[0]]
+		start = coords.data[e[0]]
+		end = coords.data[e[1]]
+		drawLine(start, end)
 
 def doStuff(obj):
-	obj = moveStuff(obj)
+	moveStuff(obj)
 	drawStuff(obj)
 	canvas.after(1000/24, lambda: doStuff(obj))
 
 def main():
 	# want a list of all objects in the scene to do stuff with 
-	cube = Matrix([[0.5,0.5,0.5],
-		[0.5,0.5,-0.5],
-		[0.5,-0.5,0.5],
-		[-0.5,0.5,0.5],
-		[0.5,-0.5,-0.5],
-		[-0.5,-0.5,0.5],
-		[-0.5,0.5,-0.5],
-		[-0.5,-0.5,-0.5]])
-	cube = Matrix.scale(cube, 150)
+	cube = Cube()
+	cube.scale(100)
 	doStuff(cube)
 	mainloop()
 

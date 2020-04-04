@@ -48,6 +48,7 @@ class Matrix:
 		return C
 
 	# expect a matrix with three rows 
+	@staticmethod
 	def rotate(A, x, y, z):
 		xRotation = Matrix([[1,0,0],[0,math.cos(x),math.sin(x)],[0,-math.sin(x),math.cos(x)]])
 		yRotation = Matrix([[math.cos(y),0,-math.sin(y)],[0,1,0],[math.sin(y),0,math.cos(y)]])
@@ -56,21 +57,23 @@ class Matrix:
 		return Matrix.mtimes(rotation,A)
 
 	# expect a matrix with three rows 
+	@staticmethod
 	def translate(A, x, y, z):
 		B = A
-		for i in range(self.col):
+		for i in range(B.col):
 			B.data[i][0]+=x
 			B.data[i][1]+=y 
 			B.data[i][2]+=z
 		return B
 
-	def scale(A, *argv):
-		if len(argv)==3:
-			x=argv[0]
-			y=argv[1]
-			z=argv[2]
-		elif len(argv)==1:
-			x=argv[0]
+	@staticmethod
+	def scale(A, s):
+		if len(s)==3:
+			x=s[0]
+			y=s[1]
+			z=s[2]
+		elif len(s)==1:
+			x=s[0]
 			y=x
 			z=x
 		B = A
