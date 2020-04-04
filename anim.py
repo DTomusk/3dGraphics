@@ -1,7 +1,7 @@
 from Tkinter import * 
 import math 
 from matrices import Matrix
-from poly import Cube
+from poly import *
 
 root = Tk()
 canvas_width = 800
@@ -10,14 +10,23 @@ canvas = Canvas(root, width=canvas_width, height=canvas_height)
 canvas.pack()
 
 orientation = Matrix([[1,0,0],[0,1,0],[0,0,1]])
+
 conversion = Matrix([[math.sqrt(3)/2,0.5],[0,-1],[-math.sqrt(3)/2,0.5]])
 origin = [canvas_width/2, canvas_height/2]
 
 # finds the positions of everything in 3d space
 def moveStuff(obj):
-	obj.translate(2,0,0)
+	global orientation
+	orientation = Matrix.rotate(orientation, math.pi/48,math.pi/64,math.pi/32)
+	obj.translate(1,0,0)
 	#obj.scale(1.001)
-	obj.rotate(math.pi/12,0,0)
+	obj.rotate(0,0,0)
+
+def convert(obj):
+	verts = Matrix.mtimes(conversion,Matrix.mtimes(orientation, obj.verts))
+	edges = obj.edges
+	center = Matrix.mtimes(conversion,Matrix.mtimes(orientation, obj.center))
+	return Poly(verts, edges, center)
 
 # converts positions to 2d and draws them (should decouple)
 def drawStuff(obj):
@@ -45,14 +54,15 @@ def drawLine(start, end):
 		origin[0]+end[0], origin[1]+end[1], fill="white")
 
 def drawPoly(obj):
-	coords = Matrix.mtimes(conversion,obj.verts)
-	Matrix.mtimes(conversion,obj.center).display()
-	drawPoint(Matrix.mtimes(conversion,obj.center).data[0])
-	for v in coords.data:
+	toDraw = convert(obj)
+	# this is dumb, mtimes on a vector should return a vector 
+	# I keep having to say .data[], maybe that should be handled in drawPoint? 
+	drawPoint(toDraw.center.data[0])
+	for v in toDraw.verts.data:
 		drawPoint(v)
-	for e in obj.edges:
-		start = coords.data[e[0]]
-		end = coords.data[e[1]]
+	for e in toDraw.edges:
+		start = toDraw.verts.data[e[0]]
+		end = toDraw.verts.data[e[1]]
 		drawLine(start, end)
 
 def doStuff(obj):

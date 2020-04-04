@@ -41,6 +41,7 @@ class Matrix:
 				for j in range(B.col):
 					for k in range(A.col):
 						C.data[j][i] += A.data[k][i]*B.data[j][k]
+			return C
 		elif isinstance(B, list):
 			if A.col != len(B):
 				print "Cannot multiply these matrices"
@@ -49,7 +50,8 @@ class Matrix:
 			for i in range(A.row):
 				for k in range(A.col):
 					C.data[0][i] += A.data[k][i]*B[k]
-		return C
+			return C
+		else: print "Incorrect argument types"
 
 	# expect a matrix with three rows 
 	@staticmethod
