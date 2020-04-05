@@ -4,8 +4,8 @@ from matrices import Matrix
 from poly import *
 
 root = Tk()
-canvas_width = 800
-canvas_height = 600
+canvas_width = 1200
+canvas_height = 800
 canvas = Canvas(root, width=canvas_width, height=canvas_height)
 canvas.pack()
 
@@ -16,8 +16,14 @@ origin = [canvas_width/2, canvas_height/2]
 
 # finds the positions of everything in 3d space
 def moveStuff(obj):
-	# test out axis rotation
-	print "does nothing for now"
+	#global origin
+	#origin[0]-=1
+	#origin[1]-=1
+	global orientation
+	orientation = Matrix.rotate(orientation, math.pi/32, 0, 0)
+	obj.translate(1,0,0)
+	#obj.scale(1.01)
+	obj.rotate(0, math.pi/24,0)
 
 # takes a poly and produces a new one whose attributes match the 2d coordinates 
 def convert(obj):
@@ -26,11 +32,12 @@ def convert(obj):
 		v[0] += origin[0]
 		v[1] += origin[1]
 	edges = obj.edges
+	faces = obj.faces
 	center = Matrix.mtimes(conversion,Matrix.mtimes(orientation, obj.center))
 	for c in center.data:
 		c[0] += origin[0]
 		c[1] += origin[1]
-	return Poly(verts, edges, center)
+	return Poly(verts, edges, faces, center)
 
 def drawStuff(obj):
 	# clear canvas every frame
@@ -62,7 +69,6 @@ def drawLine(start, end):
 	canvas.create_line(start[0], start[1],
 		end[0], end[1], fill="white")
 
-
 def drawPoly(obj):
 	toDraw = convert(obj)
 	# this is dumb, mtimes on a vector should return a vector 
@@ -79,7 +85,7 @@ def drawPoly(obj):
 def doStuff(obj):
 	moveStuff(obj)
 	drawStuff(obj)
-	canvas.after(1000/24, lambda: doStuff(obj))
+	canvas.after(1000/12, lambda: doStuff(obj))
 
 def main():
 	# want a list of all objects in the scene to do stuff with 

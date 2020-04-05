@@ -4,24 +4,11 @@ from matrices import Matrix
 # needs to store faces too at some point, but we'll try those two things first 
 
 class Poly:
-	def __init__(self, v, e, c):
+	def __init__(self, v, e, f, c):
 		self.verts = v
-		# do we pass the edges in or are we supposed to create them from the points? 
-		# I don't think it's possible to figure out the edges from the points alone
-		# which pairs are edges and which aren't? 
-		# I think for a generic polyhedron these have to be inputed 
-		# There will be specific polyhedra as well, such as cubes which are already solved 
-		# polyhedra will need methods for manipulating verts, edges, and faces 
-		# for now we assume that the edges are given correctly 
 		self.edges = e
-		# we need to know where the center is because that's where we're scaling, rotating from
-		# center is just a list of numbers 
+		self.faces = f
 		self.center = c
-
-	# the advantage of having edges be pointers is that we don't have to change them when transforming
-
-	# we want methods for transforming polyhedra
-	# we already have all the matrix methods, so all that needs doing is calling those on verts
 
 	def translate(self, x, y, z):
 		# should translate the center 
@@ -55,3 +42,6 @@ class Cube(Poly):
 		self.edges=[[0,1],[0,2],[0,3],[1,4],
 			[1,6],[2,4],[2,5],[3,5],
 			[3,6],[4,7],[5,7],[6,7]]
+		# should faces point to edges or vertices? I feel like vertices would be easier
+		self.faces=[[0,1,3,6],[0,1,2,4],[0,2,3,5],
+			[1,4,6,7],[2,4,5,7],[3,5,6,7]]

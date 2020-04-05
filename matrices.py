@@ -18,6 +18,7 @@ class Matrix:
 			print row
 
 	# what would I use the determinant for? 
+	# the determinant can be used for finding inverses 
 	def determinant(self):
 		if self.row == self.col:
 			if self.row == 2:
