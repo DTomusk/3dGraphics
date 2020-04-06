@@ -30,4 +30,6 @@ fn main() {
     };
     mat.rotate_m(PI, 0.0, 0.0);
     mat.display();
+    mat.translate_m(2.0, 5.0, 4.0);
+    mat.display();
 }

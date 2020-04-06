@@ -46,11 +46,37 @@ impl Matrix {
 		};
 	}
 
+	pub fn translate_v(a: [f32;3], x: f32, y: f32, z: f32) -> Result<[f32; 3], &'static str> {
+		let mut res = [x, y, z];
+		res[0] += a[0];
+		res[1] += a[1];
+		res[2] += a[2];
+		return Ok(res)
+	}
+
+	pub fn translate_m(&mut self, x: f32, y: f32, z: f32) {
+		for i in 0..3 {
+			self.columns[i] = Matrix::translate_v(self.columns[i], x, y, z).unwrap();
+		};
+	}
+
+	pub fn scale_v(a: [f32;3], s: f32) -> Result<[f32; 3], &'static str> {
+		let mut res = a;
+		for i in 0..3 {
+			res[i] *= s;
+		}
+		return Ok(res)
+	}
+
+	pub fn scale_m(&mut self, s: f32) {
+		for i in 0..3 {
+			self.columns[i] = Matrix::scale_v(self.columns[i], s).unwrap();
+		};
+	}
+
 	pub fn display(&self) {
 		for i in 0..3 {
-			for j in 0..3 {
-				println!("{}", self.columns[i][j]);
-			}
+			println!("{} {} {}", self.columns[0][i] as i32, self.columns[1][i] as i32, self.columns[2][i] as i32);
 		}
 	}
 }
