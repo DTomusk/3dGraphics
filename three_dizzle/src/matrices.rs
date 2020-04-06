@@ -1,58 +1,44 @@
 pub struct Vertex {
-	leaving: Edge,
-	coords: (i32, i32, i32),
+	//leaving: &'a Edge,
+	pub coords: Coords,
 }
 
-pub struct Edge {
-	twin: Edge,
-	next: Edge,
-	origin: Vertex,
-	incident: Face,
+pub struct Coords {
+	pub x: i32,
+	pub y: i32,
+	pub z: i32,
 }
 
-pub struct Face {
-	incident: Edge,
-}
-
-pub struct Polyhedron {
-	faces: Vec<Face>,
-}
-
-pub struct Matrix {
-	columns: Vec<Vector>,
-}
-
-pub struct Vector {
-	entries: Vec<i32>,
-}
-
-impl Vector {
-	pub fn add(A:Vector, B:Vector) -> Result<Vector, &'static str> {
-		if A.len() != B.len() {
-			Err("Vectors of different lengths")
-		} else {
-			let C = vec![];
-			// this isn't right
-			for i in 0..A.len() {
-				C.push(A[i]+B[i]);
-			}
-			Ok(C)
-		}
+impl Coords {
+	// functions to transform coordinates
+	pub fn display(self: &Self) {
+		println!("x: {}", self.x);
+		println!("y: {}", self.y);
+		println!("z: {}", self.z);
 	}
 
-	pub fn sProduct(A:Vector, B:Vector) -> Result<i32, &'static str> {
-		if A.len() != B.len() {
-			Err("Vectors of different lengths")
-		} else {
-			let mut C = 0;
-			for i in 0..A.len() {
-				C += A[i]*B[i];
-			}
-			Ok(C)
-		}
-	}
-
-	pub fn vProduct() -> Vector {
-
+	pub fn translate(&mut self, dx: i32, dy: i32, dz: i32) {
+		self.x += dx;
+		self.y += dy;
+		self.z += dz;
 	}
 }
+
+/*
+pub struct Edge<'a> {
+	twin: &'a Edge,
+	next: &'a Edge,
+	origin: &'a Vertex,
+	incident: &'a Face,
+}
+
+pub struct Face<'a> {
+	incident: &'a Edge,
+}
+
+pub struct Matrix<'a> {
+	columns: Vec<Coords>,
+}
+
+
+*/
