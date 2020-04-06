@@ -1,27 +1,33 @@
 pub struct Vertex {
 	//leaving: &'a Edge,
-	pub coords: Coords,
+	pub coords: [i32; 3],
 }
 
-pub struct Coords {
-	pub x: i32,
-	pub y: i32,
-	pub z: i32,
+pub struct Matrix {
+	pub columns: Vec<[i32; 3]>,
 }
 
-impl Coords {
-	// functions to transform coordinates
-	pub fn display(self: &Self) {
-		println!("x: {}", self.x);
-		println!("y: {}", self.y);
-		println!("z: {}", self.z);
+impl Matrix {
+	// will return either a matrix or a coords
+	pub fn mtimesv(a: Matrix, b: [i32; 3]) -> Result<[i32; 3], &'static str> {
+		if a.columns.len() != 3 {
+			Err("Matrix must have three columns to multiply with vector")
+		} else {
+			let mut res = [0,0,0];
+			for i in 0..2 {
+				for col in &a.columns {
+					for j in 0..2 {
+						res[i] += col[i]*b[j];
+					};
+				};
+			};
+			Ok(res)
+		}
 	}
 
-	pub fn translate(&mut self, dx: i32, dy: i32, dz: i32) {
-		self.x += dx;
-		self.y += dy;
-		self.z += dz;
-	}
+	//pub fn mtimesm(A: Matrix, B: Matrix) -> Result<Matrix, ()> {
+
+	//}
 }
 
 /*
@@ -36,9 +42,7 @@ pub struct Face<'a> {
 	incident: &'a Edge,
 }
 
-pub struct Matrix<'a> {
-	columns: Vec<Coords>,
-}
+
 
 
 */
