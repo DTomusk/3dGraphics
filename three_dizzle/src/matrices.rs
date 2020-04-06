@@ -4,30 +4,41 @@ pub struct Vertex {
 }
 
 pub struct Matrix {
-	pub columns: Vec<[i32; 3]>,
+	pub columns: [[i32; 3]; 3],
 }
 
 impl Matrix {
 	// will return either a matrix or a coords
-	pub fn mtimesv(a: Matrix, b: [i32; 3]) -> Result<[i32; 3], &'static str> {
+	pub fn mtimesv(a: &Matrix, b: &[i32; 3]) -> Result<[i32; 3], &'static str> {
 		if a.columns.len() != 3 {
-			Err("Matrix must have three columns to multiply with vector")
+			return Err("Matrix must have three columns to multiply with vector")
 		} else {
 			let mut res = [0,0,0];
-			for i in 0..2 {
-				for col in &a.columns {
-					for j in 0..2 {
-						res[i] += col[i]*b[j];
-					};
+			for i in 0..3 {
+				for j in 0..3 {
+					res[i] += a.columns[j][i]*b[j];
 				};
 			};
-			Ok(res)
-		}
+			return Ok(res)
+		};
 	}
 
-	//pub fn mtimesm(A: Matrix, B: Matrix) -> Result<Matrix, ()> {
+	pub fn mtimesm(a: &Matrix, b: &Matrix) -> Result<Matrix, ()> {
+		// assume can multiply
+		let mut res = [[0;3];3];
+		for i in 0..3 {
+			res[i] = Matrix::mtimesv(&a, &b.columns[i]).unwrap();
+		}
+		return Ok(Matrix{columns: res})
+	}
 
-	//}
+	pub fn display(&self) {
+		for i in 0..3 {
+			for j in 0..3 {
+				println!("{}", self.columns[i][j]);
+			}
+		}
+	}
 }
 
 /*
