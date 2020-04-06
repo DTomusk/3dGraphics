@@ -2,25 +2,32 @@ mod matrices;
 
 pub use crate::matrices::*;
 
-fn display(point: &[i32; 3]) {
+fn display(point: &[f32; 3]) {
     println!("x: {}", point[0]);
     println!("y: {}", point[1]);
     println!("z: {}", point[2]);
 }
 
 fn main() {
-    println!("Hello, world!");
+    const PI: f32 = 3.1416;
+    /*
     let mut point = Vertex {
-        coords: [1,2,3],
+        coords: [1.0,2.0,3.0],
     };
-    let mut mat = Matrix {
-        columns: [[1,2,3],[1,2,4],[1,2,1]],
+    let mat = Matrix {
+        columns: [[1.0,2.0,3.0],[1.0,2.0,4.0],[1.0,2.0,1.0]],
     };
     let mut mat2 = Matrix {
-        columns: [[0,1,0],[1,0,0],[0,0,1]],
+        columns: [[0.0,1.0,0.0],[1.0,0.0,0.0],[0.0,0.0,1.0]],
     };
-    point.coords = matrices::Matrix::mtimesv(&mat, &point.coords).unwrap();
+    point.coords = matrices::Matrix::mtimes_v(&mat, &point.coords).unwrap();
     display(&point.coords);
-    mat2 = matrices::Matrix::mtimesm(&mat, &mat2).unwrap();
+    mat2 = matrices::Matrix::mtimes_m(&mat, &mat2).unwrap();
     mat2.display();
+    */
+    let mut mat = Matrix {
+        columns: [[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1.0]],
+    };
+    mat.rotate_m(PI, 0.0, 0.0);
+    mat.display();
 }
