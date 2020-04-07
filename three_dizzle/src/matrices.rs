@@ -3,8 +3,7 @@ pub struct Vertex {
 	pub coords: [f32; 3],
 }
 
-// will return either a matrix or a coords
-pub fn mtimes(a: &[[f32;3]], b: &[f32]) -> Result<[f32;3], &'static str> {
+pub fn mtimes(a: &Vec<[f32;3]>, b: &[f32;3]) -> Result<[f32;3], &'static str> {
 	if a[0].len() != 3 {
 		return Err("Matrix must have three columns to multiply with vector")
 	} else {
