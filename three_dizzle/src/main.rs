@@ -25,11 +25,11 @@ fn main() {
     mat2 = matrices::Matrix::mtimes_m(&mat, &mat2).unwrap();
     mat2.display();
     */
-    let mut mat = Matrix {
-        columns: [[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1.0]],
-    };
-    mat.rotate_m(PI, 0.0, 0.0);
-    mat.display();
-    mat.translate_m(2.0, 5.0, 4.0);
-    mat.display();
+    let mut mat = [[2.0,0.0,0.0],[0.0,0.0,1.0],[0.0,0.0,1.0]];
+    let me = matrices::mtimes(&mat, &[1.0,2.0,3.0]).unwrap();
+    println!("{}, {}, {}", me[0],me[1],me[2]);
+    //mat.rotate_m(PI, 0.0, 0.0);
+    //mat.display();
+    //mat.translate_m(2.0, 5.0, 4.0);
+    //mat.display();
 }
