@@ -8,7 +8,10 @@ fn main() {
     let _me = matrices::mtimes(&mat, &[1.0,2.0,3.0]).unwrap();
 
     let line = matrices::Poly::create_line([1.1,1.1,1.1],[2.3,4.3,5.2]);
+    let cycle = matrices::Poly::create_cycle(&vec![[2.0,0.0,0.0],[0.0,0.0,1.0],[0.0,0.0,1.0]]);
     line.display();
+    cycle.display();
+    cycle.check_cycle();
 
 /*
     let mut point1 = matrices::Vertex {

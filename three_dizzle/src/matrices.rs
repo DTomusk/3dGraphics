@@ -38,10 +38,6 @@ impl Poly {
 		self.verts.len() -1
 	}
 
-	pub fn create_vertex(&mut self, coords: [f32;3]) {
-		self.add_vertex(coords);
-	}
-
 	fn add_half(&mut self, origin: usize) -> usize {
 		self.edges.push(Edge{
 			twin: None,
@@ -49,6 +45,12 @@ impl Poly {
 			origin: origin,
 		});
 		self.edges.len() -1
+	}
+
+	pub fn create_vertex(coords: [f32;3]) -> Poly {
+		let mut poly = Poly::empty_poly();
+		poly.add_vertex(coords);
+		poly
 	}
 
 	pub fn create_line(start: [f32;3], end: [f32;3]) -> Poly {
@@ -68,10 +70,45 @@ impl Poly {
 		poly
 	}
 
+	pub fn create_path(path: &Vec<[f32;3]>) -> Poly {
+		let mut poly = Poly::create_line(path[0], path[1]);
+		let mut latest_vert = 1;
+		let mut edge1 = 0;
+		let mut edge2 = 1;
+		for i in 2..path.len(){
+			latest_vert = poly.add_vertex(path[i]);
+			edge1 = poly.add_half(latest_vert-1);
+			edge2 = poly.add_half(latest_vert);
+			poly.verts[latest_vert].leaving = Some(edge2);
+			poly.edges[edge1].twin = Some(edge2);
+			poly.edges[edge2].twin = Some(edge1);
+			poly.edges[edge2].next = Some(edge2-2);
+			poly.edges[edge1-2].next =  Some(edge1);
+		};
+		poly
+	}
+
+	pub fn create_cycle(cycle: &Vec<[f32;3]>) -> Poly {
+		let mut poly = Poly::create_path(&cycle);
+		let pen = poly.add_half(0);
+		let last = poly.add_half(poly.verts.len()-1);
+		poly.edges[pen].twin = Some(last);
+		poly.edges[last].twin = Some(pen);
+		poly.edges[pen].next = Some(pen-1);
+		poly.edges[last].next = Some(0);
+		poly.edges[last-3].next = Some(last);
+		poly.edges[1].next = Some(pen);
+		poly
+	}
+
 	pub fn display(&self) {
 		println!("Vertices:");
 		for v in &self.verts {
-			println!("x: {}, y: {}, z: {}", v.coords[0], v.coords[1], v.coords[2]);
+			print!("x: {}, y: {}, z: {}, ", v.coords[0], v.coords[1], v.coords[2]);
+			match v.leaving {
+				Some(i) => println!("leaving: {}", i),
+				None => println!("leaving: none"),
+			};
 		};
 		println!("");
 		println!("Edges:");
@@ -86,6 +123,23 @@ impl Poly {
 				None => println!("No twin"),
 			};
 			println!("");
+		};
+	}
+
+	pub fn check_cycle(&self) {
+		let mut ret = false;
+		let start = 0;
+		let mut index = 0;
+		while ret == false {
+			if self.edges[index].next == None {
+				println!("Not cyclic");
+				break;
+			} else if self.edges[index].next.unwrap() == start {
+				print!("Cyclic");
+				ret = true;
+			} else {
+				index = self.edges[index].next.unwrap();
+			};
 		};
 	}
 
