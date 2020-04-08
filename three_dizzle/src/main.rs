@@ -7,10 +7,8 @@ fn main() {
     let mat = vec![[2.0,0.0,0.0],[0.0,0.0,1.0],[0.0,0.0,1.0]];
     let _me = matrices::mtimes(&mat, &[1.0,2.0,3.0]).unwrap();
 
-    let mut shape = matrices::Poly::empty_poly();
-    shape.create_edge([1.0,2.0,3.1], [0.0,0.0,0.0]);
-    shape.create_edge([4.4,2.1,5.0], [1.1,1.0,1.0]);
-    shape.display();
+    let line = matrices::Poly::create_line([1.1,1.1,1.1],[2.3,4.3,5.2]);
+    line.display();
 
 /*
     let mut point1 = matrices::Vertex {

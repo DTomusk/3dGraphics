@@ -51,19 +51,21 @@ impl Poly {
 		self.edges.len() -1
 	}
 
-	pub fn create_edge(&mut self, start: [f32;3], end: [f32;3]) {
-		let start_index = self.add_vertex(start);
-		let end_index = self.add_vertex(end);
-		let half_pointer_1 = self.add_half(start_index);
-		let half_pointer_2 = self.add_half(end_index);
-		if self.verts[start_index].leaving == None {
-			self.verts[start_index].leaving = Some(half_pointer_1);
+	pub fn create_line(start: [f32;3], end: [f32;3]) -> Poly {
+		let mut poly = Poly::empty_poly();
+		let start_index = poly.add_vertex(start);
+		let end_index = poly.add_vertex(end);
+		let half_pointer_1 = poly.add_half(start_index);
+		let half_pointer_2 = poly.add_half(end_index);
+		if poly.verts[start_index].leaving == None {
+			poly.verts[start_index].leaving = Some(half_pointer_1);
 		};
-		if self.verts[end_index].leaving == None {
-			self.verts[end_index].leaving = Some(half_pointer_2);
+		if poly.verts[end_index].leaving == None {
+			poly.verts[end_index].leaving = Some(half_pointer_2);
 		};
-		self.edges[half_pointer_1].twin = Some(half_pointer_2);
-		self.edges[half_pointer_2].twin = Some(half_pointer_1);
+		poly.edges[half_pointer_1].twin = Some(half_pointer_2);
+		poly.edges[half_pointer_2].twin = Some(half_pointer_1);
+		poly
 	}
 
 	pub fn display(&self) {
