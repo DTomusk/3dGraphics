@@ -1,6 +1,13 @@
 pub struct Vertex {
-	//leaving: &'a Edge,
+	pub leaving: i32,
 	pub coords: [f32; 3],
+}
+
+pub struct Edge {
+	pub twin: i32,
+	pub next: i32,
+	pub origin: i32,
+	//incident: &Face,
 }
 
 pub fn mtimes(a: &Vec<[f32;3]>, b: &[f32;3]) -> Result<[f32;3], &'static str> {
