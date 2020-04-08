@@ -7,6 +7,12 @@ fn main() {
     let mat = vec![[2.0,0.0,0.0],[0.0,0.0,1.0],[0.0,0.0,1.0]];
     let _me = matrices::mtimes(&mat, &[1.0,2.0,3.0]).unwrap();
 
+    let mut shape = matrices::Poly::empty_poly();
+    shape.create_edge([1.0,2.0,3.1], [0.0,0.0,0.0]);
+    shape.create_edge([4.4,2.1,5.0], [1.1,1.0,1.0]);
+    shape.display();
+
+/*
     let mut point1 = matrices::Vertex {
         leaving: -1,
         coords: [1.0, 0.0, 0.0],
@@ -39,7 +45,7 @@ fn main() {
     elist[0].twin=1;
     elist[1].twin=0;
     println!("{}", elist[0].twin);
-
+*/
     // a shape will consist of a vector of faces, a vector of half edges, and a vector of vertices
-    // pointers will be indices in each other's arrays 
+    // pointers will be indices in each other's arrays
 }

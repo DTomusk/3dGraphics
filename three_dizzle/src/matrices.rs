@@ -1,13 +1,97 @@
-pub struct Vertex {
-	pub leaving: i32,
-	pub coords: [f32; 3],
+struct Vertex {
+	leaving: Option<usize>,
+	coords: [f32; 3],
 }
 
-pub struct Edge {
-	pub twin: i32,
-	pub next: i32,
-	pub origin: i32,
+struct Edge {
+	twin: Option<usize>,
+	next: Option<usize>,
+	origin: usize,
 	//incident: &Face,
+}
+
+struct Face {
+	incident: Option<usize>,
+}
+
+pub struct Poly {
+	verts: Vec<Vertex>,
+	edges: Vec<Edge>,
+	faces: Vec<Face>,
+}
+
+impl Poly {
+	pub fn empty_poly() -> Poly {
+		let mut poly = Poly {
+			verts: vec![],
+			edges: vec![],
+			faces: vec![]
+		};
+		poly
+	}
+
+	pub fn add_vertex(&mut self, coords: [f32;3]) -> usize {
+		self.verts.push(Vertex {
+			leaving: None,
+			coords: coords,
+		});
+		self.verts.len() -1
+	}
+
+	pub fn create_vertex(&mut self, coords: [f32;3]) {
+		self.add_vertex(coords);
+	}
+
+	fn add_half(&mut self, origin: usize) -> usize {
+		self.edges.push(Edge{
+			twin: None,
+			next: None,
+			origin: origin,
+		});
+		self.edges.len() -1
+	}
+
+	pub fn create_edge(&mut self, start: [f32;3], end: [f32;3]) {
+		let start_index = self.add_vertex(start);
+		let end_index = self.add_vertex(end);
+		let half_pointer_1 = self.add_half(start_index);
+		let half_pointer_2 = self.add_half(end_index);
+		if self.verts[start_index].leaving == None {
+			self.verts[start_index].leaving = Some(half_pointer_1);
+		};
+		if self.verts[end_index].leaving == None {
+			self.verts[end_index].leaving = Some(half_pointer_2);
+		};
+		self.edges[half_pointer_1].twin = Some(half_pointer_2);
+		self.edges[half_pointer_2].twin = Some(half_pointer_1);
+	}
+
+	pub fn display(&self) {
+		println!("Vertices:");
+		for v in &self.verts {
+			println!("x: {}, y: {}, z: {}", v.coords[0], v.coords[1], v.coords[2]);
+		};
+		println!("");
+		println!("Edges:");
+		for e in &self.edges {
+			println!("Origin: {}", e.origin);
+			match e.next {
+				Some(n) => println!("Next: {}", n),
+				None => println!("No next"),
+			};
+			match e.twin {
+				Some(t) => println!("Twin: {}", t),
+				None => println!("No twin"),
+			};
+			println!("");
+		};
+	}
+
+/*
+	fn add_face() {
+
+	}
+*/
 }
 
 pub fn mtimes(a: &Vec<[f32;3]>, b: &[f32;3]) -> Result<[f32;3], &'static str> {
