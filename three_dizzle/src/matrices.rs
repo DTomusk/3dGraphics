@@ -42,10 +42,16 @@ impl Poly {
 				Some(i) => start_pointer = Some(i),
 				None => start_pointer = Some(poly.add_vertex(edge[0])),
 			};
+			// this is an exact repeat of what's above but I'm not sure it's worth it to
+			// make it a function of its own
 			match Poly::check_vert(&edge[1], &poly) {
 				Some(i) => end_pointer = Some(i),
 				None => end_pointer = Some(poly.add_vertex(edge[1])),
 			};
+			let first_pointer = poly.add_half(start_pointer.unwrap());
+			let second_pointer = poly.add_half(end_pointer.unwrap());
+			poly.edges[first_pointer].twin = Some(second_pointer);
+			poly.edges[second_pointer].twin = Some(first_pointer);
 		};
 		poly
 	}
