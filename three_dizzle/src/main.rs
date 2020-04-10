@@ -4,6 +4,7 @@ mod matrices;
 use std::rc::Rc;
 
 fn main() {
+    /*
     let mat = vec![[2.0,0.0,0.0],[0.0,0.0,1.0],[0.0,0.0,1.0]];
     let _me = matrices::mtimes(&mat, &[1.0,2.0,3.0]).unwrap();
 
@@ -12,6 +13,10 @@ fn main() {
     line.display();
     cycle.display();
     cycle.check_cycle();
+    */
+
+    let shape = matrices::Poly::make_poly(&vec![[[1.0,0.0,0.0],[0.0,1.0,0.0]],[[0.0,1.0,0.0],[0.0,0.0,1.0]],[[1.0,0.0,0.0],[0.0,0.0,1.0]]]);
+    shape.display();
 
 /*
     let mut point1 = matrices::Vertex {

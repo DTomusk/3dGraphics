@@ -30,6 +30,36 @@ impl Poly {
 		poly
 	}
 
+	// this can be a slow process
+	// but once it's initialised it's good to work with
+	pub fn make_poly(edge_list: &Vec<[[f32;3];2]>) -> Poly {
+		// add all vertices
+		let mut poly = Poly::empty_poly();
+		for edge in edge_list {
+			let mut start_pointer: Option<usize> = None;
+			let mut end_pointer: Option<usize> = None;
+			match Poly::check_vert(&edge[0], &poly) {
+				Some(i) => start_pointer = Some(i),
+				None => start_pointer = Some(poly.add_vertex(edge[0])),
+			};
+			match Poly::check_vert(&edge[1], &poly) {
+				Some(i) => end_pointer = Some(i),
+				None => end_pointer = Some(poly.add_vertex(edge[1])),
+			};
+		};
+		poly
+	}
+
+	pub fn check_vert(point: &[f32;3], poly: &Poly) -> Option<usize> {
+		let mut index = None;
+		for (i, v) in poly.verts.iter().enumerate() {
+			if (v.coords[0] == point[0]) & (v.coords[1] == point[1]) & (v.coords[2] == point[2]) {
+				index = Some(i);
+			};
+		};
+		index
+	}
+
 	pub fn add_vertex(&mut self, coords: [f32;3]) -> usize {
 		self.verts.push(Vertex {
 			leaving: None,
