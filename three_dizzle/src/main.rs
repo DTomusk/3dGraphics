@@ -1,8 +1,5 @@
 mod matrices;
 
-//use crate::matrices::*;
-use std::rc::Rc;
-
 fn main() {
     /*
     let mat = vec![[2.0,0.0,0.0],[0.0,0.0,1.0],[0.0,0.0,1.0]];
@@ -15,7 +12,9 @@ fn main() {
     cycle.check_cycle();
     */
 
-    let shape = matrices::Poly::make_poly(&vec![[[1.0,0.0,0.0],[0.0,1.0,0.0]],[[0.0,1.0,0.0],[0.0,0.0,1.0]],[[1.0,0.0,0.0],[0.0,0.0,1.0]]]);
+    let mut shape = matrices::Poly::make_poly(&vec![[[1.0,0.0,0.0],[0.0,1.0,0.0]],[[0.0,1.0,0.0],[0.0,0.0,1.0]],[[1.0,0.0,0.0],[0.0,0.0,1.0]]]);
+    shape.display();
+    shape.swap(0,3);
     shape.display();
 
 /*

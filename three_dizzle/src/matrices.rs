@@ -51,7 +51,7 @@ impl Poly {
 			let first_pointer = poly.add_half(start_pointer.unwrap());
 			let second_pointer = poly.add_half(end_pointer.unwrap());
 
-			// twins are also wrong with the reordering 
+			// twins are also wrong with the reordering
 			poly.edges[first_pointer].twin = Some(second_pointer);
 			poly.edges[second_pointer].twin = Some(first_pointer);
 
@@ -63,13 +63,42 @@ impl Poly {
 				poly.verts[end_pointer.unwrap()].leaving = Some(second_pointer);
 			};
 		};
-		poly.edges.sort_by(|b, a| b.origin.cmp(&a.origin));
+		//poly.edges.sort_by(|b, a| b.origin.cmp(&a.origin));
 
-		for i in 0..poly.vertices.len() {
+
+		// the question is how often do I plan on reordering elements?
+		// pointers need to be updated very carefully
+		// we can set leaving pointers after the fact (do we even need them?)
+		for i in 0..poly.verts.len() {
 
 		}
 
 		poly
+	}
+
+	pub fn swap(&mut self, first: usize, second: usize) {
+		// this swaps them, but it doesn't set the pointers right
+		let i: usize = self.edges[first].twin.unwrap();
+		let j: usize = self.edges[second].twin.unwrap();
+		let swap_twin = self.edges[i].twin;
+		self.edges[i].twin = self.edges[j].twin;
+		self.edges[j].twin = swap_twin;
+
+		if self.verts[self.edges[first].origin].leaving.unwrap() == first {
+			self.verts[self.edges[first].origin].leaving = Some(second);
+		};
+
+		if self.verts[self.edges[second].origin].leaving.unwrap() == second {
+			self.verts[self.edges[second].origin].leaving = Some(first);
+		};
+
+		let temp_o = self.edges[first].origin;
+		self.edges[first].origin = self.edges[second].origin;
+		self.edges[second].origin = temp_o;
+
+		let temp_twin = self.edges[first].twin;
+		self.edges[first].twin = self.edges[second].twin;
+		self.edges[second].twin = temp_twin;
 	}
 
 	pub fn check_vert(point: &[f32;3], poly: &Poly) -> Option<usize> {
