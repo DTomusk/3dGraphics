@@ -31,7 +31,7 @@ impl Poly {
 	}
 
 	// this can be a slow process
-	// but once it's initialised it's good to work with
+	// but once it's initialised it's easy to work with
 	pub fn make_poly(edge_list: &Vec<[[f32;3];2]>) -> Poly {
 		// add all vertices
 		let mut poly = Poly::empty_poly();
@@ -50,9 +50,25 @@ impl Poly {
 			};
 			let first_pointer = poly.add_half(start_pointer.unwrap());
 			let second_pointer = poly.add_half(end_pointer.unwrap());
+
+			// twins are also wrong with the reordering 
 			poly.edges[first_pointer].twin = Some(second_pointer);
 			poly.edges[second_pointer].twin = Some(first_pointer);
+
+			// this part doesn't apply anymore
+			if poly.verts[start_pointer.unwrap()].leaving == None {
+				poly.verts[start_pointer.unwrap()].leaving = Some(first_pointer);
+			};
+			if poly.verts[end_pointer.unwrap()].leaving == None {
+				poly.verts[end_pointer.unwrap()].leaving = Some(second_pointer);
+			};
 		};
+		poly.edges.sort_by(|b, a| b.origin.cmp(&a.origin));
+
+		for i in 0..poly.vertices.len() {
+
+		}
+
 		poly
 	}
 
