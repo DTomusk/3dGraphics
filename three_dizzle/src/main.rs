@@ -1,4 +1,5 @@
 mod matrices;
+mod quicksort;
 
 fn main() {
     /*
@@ -12,10 +13,11 @@ fn main() {
     cycle.check_cycle();
     */
 
-    let mut shape = matrices::Poly::make_poly(&vec![[[1.0,0.0,0.0],[0.0,1.0,0.0]],[[0.0,1.0,0.0],[0.0,0.0,1.0]],[[1.0,0.0,0.0],[0.0,0.0,1.0]]]);
+    let mut shape = matrices::Poly::make_poly(&vec![[[1.0,0.0,0.0],[0.0,1.0,0.0]],[[0.0,1.0,0.0],[0.0,0.0,1.0]],[[1.0,0.0,0.0],[0.0,0.0,1.0]],[[1.0,0.0,0.0],[0.0,2.0,0.0]],[[0.0,2.0,0.0],[0.0,0.0,1.0]],[[0.0,0.0,0.0],[0.0,1.0,0.0]]]);
     shape.display();
-    shape.swap(0,3);
+    shape.quicksort(0, shape.edges.len());
     shape.display();
+
 
 /*
     let mut point1 = matrices::Vertex {

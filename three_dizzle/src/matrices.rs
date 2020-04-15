@@ -3,7 +3,7 @@ struct Vertex {
 	coords: [f32; 3],
 }
 
-struct Edge {
+pub struct Edge {
 	twin: Option<usize>,
 	next: Option<usize>,
 	origin: usize,
@@ -16,7 +16,7 @@ struct Face {
 
 pub struct Poly {
 	verts: Vec<Vertex>,
-	edges: Vec<Edge>,
+	pub edges: Vec<Edge>,
 	faces: Vec<Face>,
 }
 
@@ -63,17 +63,70 @@ impl Poly {
 				poly.verts[end_pointer.unwrap()].leaving = Some(second_pointer);
 			};
 		};
-		//poly.edges.sort_by(|b, a| b.origin.cmp(&a.origin));
-
-
+		//poly.edges.sort_by(|b, a| b.origin.cmp(&a.origin))
 		// the question is how often do I plan on reordering elements?
 		// pointers need to be updated very carefully
 		// we can set leaving pointers after the fact (do we even need them?)
-		for i in 0..poly.verts.len() {
-
-		}
 
 		poly
+	}
+
+	pub fn quicksort(&mut self, lower: usize, upper: usize) {
+	    let mut pivot: usize = upper/2;
+	    // want to iterate counters either side of the pivot
+	    let mut first_counter = lower;
+	    let mut second_counter = pivot + 1;
+		println!("Pivot: {}", pivot);
+		println!("First: {}", first_counter);
+		println!("Second: {}", second_counter);
+	    while (first_counter < pivot) | (second_counter < upper) {
+	        // if the current things need to be swapped then swap them
+	        if (first_counter < pivot) & (second_counter < upper) {
+	            if (self.edges[first_counter].origin > self.edges[pivot].origin) & (self.edges[second_counter].origin < self.edges[pivot].origin) {
+	                self.swap(first_counter, second_counter);
+	                first_counter+=1;
+	                second_counter+=1;
+	            } else if self.edges[first_counter].origin > self.edges[pivot].origin {
+	                second_counter+=1;
+	            } else if self.edges[second_counter].origin < self.edges[pivot].origin {
+	                first_counter+=1;
+	            } else {
+	                first_counter += 1;
+	                second_counter += 1;
+	            };
+	        } else if first_counter < pivot {
+	            if (self.edges[first_counter].origin > self.edges[pivot].origin) & (first_counter == pivot - 1) {
+	                self.swap(pivot, first_counter);
+	                pivot -= 1;
+	            } else if self.edges[first_counter].origin > self.edges[pivot].origin {
+	                self.swap(pivot - 1, pivot);
+	                self.swap(pivot, first_counter);
+	                pivot -= 1;
+	            } else {
+	                first_counter += 1;
+	            };
+	        } else if second_counter < upper {
+	            if (self.edges[second_counter].origin < self.edges[pivot].origin) & (second_counter == pivot + 1) {
+	                self.swap(pivot, second_counter);
+	                pivot += 1;
+	            } else if self.edges[second_counter].origin < self.edges[pivot].origin {
+	                self.swap(pivot + 1, pivot);
+	                self.swap(pivot, second_counter);
+	                pivot += 1;
+	            // if one thing needs to be moved hold on to it and wait for the other
+	            } else {
+	                second_counter += 1;
+	            };
+	        };
+	    };
+		println!("Upper: {}", upper);
+		println!("Lower: {}", lower);
+	    if upper > (2 + lower) {
+			println!("Sorting lower end");
+	        self.quicksort(lower, pivot);
+			println!("Sorting upper end");
+	        self.quicksort(pivot, upper);
+	    };
 	}
 
 	pub fn swap(&mut self, first: usize, second: usize) {
