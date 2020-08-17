@@ -1,4 +1,4 @@
-from Tkinter import * 
+from tkinter import * 
 import math 
 from matrices import Matrix
 from poly import *
@@ -10,8 +10,10 @@ canvas = Canvas(root, width=canvas_width, height=canvas_height)
 canvas.pack()
 
 orientation = Matrix([[1,0,0],[0,1,0],[0,0,1]])
+forientation = Matrix([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
 
 conversion = Matrix([[math.sqrt(3)/2,0.5],[0,-1],[-math.sqrt(3)/2,0.5]])
+forversion = Matrix([[0,1],[1,0],[0,-1],[-1,0]])
 origin = [canvas_width/2, canvas_height/2]
 
 # finds the positions of everything in 3d space
@@ -19,21 +21,21 @@ def moveStuff(obj):
 	#global origin
 	#origin[0]-=1
 	#origin[1]-=1
-	global orientation
-	orientation = Matrix.rotate(orientation, math.pi/32, 0, 0)
-	obj.translate(1,0,0)
+	global forientation
+	#forientation = Matrix.fortate(forientation, math.pi/32, 0, 0, 0, 0, 0)
+	#obj.tr4nslate(1,0,0,0)
 	#obj.scale(1.01)
-	obj.rotate(0, math.pi/24,0)
+	obj.fortate(0, math.pi/24, 0, math.pi/24, 0, math.pi/24)
 
 # takes a poly and produces a new one whose attributes match the 2d coordinates 
 def convert(obj):
-	verts = Matrix.mtimes(conversion,Matrix.mtimes(orientation, obj.verts))
+	verts = Matrix.mtimes(forversion,Matrix.mtimes(forientation, obj.verts))
 	for v in verts.data:
 		v[0] += origin[0]
 		v[1] += origin[1]
 	edges = obj.edges
 	faces = obj.faces
-	center = Matrix.mtimes(conversion,Matrix.mtimes(orientation, obj.center))
+	center = Matrix.mtimes(forversion,Matrix.mtimes(forientation, obj.center))
 	for c in center.data:
 		c[0] += origin[0]
 		c[1] += origin[1]
@@ -43,7 +45,7 @@ def drawStuff(obj):
 	# clear canvas every frame
 	canvas.delete("all")
 	drawBG()
-	drawAxes()
+	draw4xes()
 	# draw everything in the scene 
 	drawPoly(obj)
 
@@ -54,6 +56,15 @@ def drawAxes():
 	# here I'm converting manually because I don't expect to be converting many non polys
 	for i in range(0, 3):
 		point = Matrix.mtimes(conversion,orientation).data[i]
+		point[0] *= 200
+		point[0] += origin[0]
+		point[1] *= 200
+		point[1] += origin[1]
+		drawLine(origin, point)
+
+def draw4xes():
+	for i in range(0, 4):
+		point = Matrix.mtimes(forversion,forientation).data[i]
 		point[0] *= 200
 		point[0] += origin[0]
 		point[1] *= 200
@@ -85,15 +96,18 @@ def drawPoly(obj):
 def doStuff(obj):
 	moveStuff(obj)
 	drawStuff(obj)
-	canvas.after(1000/12, lambda: doStuff(obj))
+	# was 1000/12 before, but need int
+	canvas.after(83, lambda: doStuff(obj))
 
 def main():
 	# want a list of all objects in the scene to do stuff with 
-	cube = Cube()
-	cube.scale(100)
+	#cube = Cube()
+	tesseract = Hypercube()
+	#cube.scale(100)
+	tesseract.sc4le(150)
 	# eventually doStuff will pass a whole scene and draw all of the objects there
 	# but for now a cube is good
-	doStuff(cube)
+	doStuff(tesseract)
 	mainloop()
 
 if __name__=="__main__":

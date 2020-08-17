@@ -121,7 +121,7 @@ impl Poly {
 	    };
 		println!("Upper: {}", upper);
 		println!("Lower: {}", lower);
-	    if upper > (2 + lower) {
+	    if upper >= (2 + lower) {
 			println!("Sorting lower end");
 	        self.quicksort(lower, pivot);
 			println!("Sorting upper end");
