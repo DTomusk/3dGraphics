@@ -1,4 +1,5 @@
 from matrices import Matrix
+import math
 # class for working with polyhedra 
 # poly stores a matrix of vertices, a list of pairs of vertex indices (to represent edges)
 # needs to store faces too at some point, but we'll try those two things first 
@@ -94,3 +95,43 @@ class Hypercube(Poly):
 			[12,13],[12,14],[13,15],[14,15]]
 		# it's wrong but unnecessary
 		self.faces=[[1,2,3,4]]
+
+class FiveCell(Poly):
+	def __init__(self):
+		self.verts = Matrix([
+			[1/math.sqrt(10), 1/math.sqrt(6), 1/math.sqrt(3),1],
+			[1/math.sqrt(10), 1/math.sqrt(6), 1/math.sqrt(3),-1],
+			[1/math.sqrt(10), 1/math.sqrt(6), -2/math.sqrt(3), 0],
+			[1/math.sqrt(10), -math.sqrt(1.5), 0, 0],
+			[-2*math.sqrt(2/5), 0, 0, 0]])
+
+		self.center=[0,0,0,0]
+
+		self.edges=[[0,1],[0,2],[0,3],[0,4],
+			[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]
+
+		self.faces=[[1,2,3]]
+
+class Hexadecachoron(Poly):
+	def __init__(self):
+		self.verts = Matrix([
+			[1,0,0,0],#0
+			[0,1,0,0],#1
+			[0,0,1,0],#2
+			[0,0,0,1],#3
+			[-1,0,0,0],#4
+			[0,-1,0,0],#5
+			[0,0,-1,0],#6
+			[0,0,0,-1]])#7
+
+		self.center=[0,0,0,0]
+
+		self.edges=[
+		[0,1],[0,2],[0,3],[0,5],
+		[0,6],[0,7],[1,2],[1,3],
+		[1,4],[1,6],[1,7],[2,3],
+		[2,4],[2,5],[2,7],[3,4],
+		[3,5],[3,6],[4,5],[4,6],
+		[4,7],[5,6],[5,7],[6,7],]
+
+		self.faces=[[1,2,3]]

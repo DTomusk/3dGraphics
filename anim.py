@@ -45,7 +45,7 @@ def drawStuff(obj):
 	# clear canvas every frame
 	canvas.delete("all")
 	drawBG()
-	draw4xes()
+	#draw4xes()
 	# draw everything in the scene 
 	drawPoly(obj)
 
@@ -102,12 +102,19 @@ def doStuff(obj):
 def main():
 	# want a list of all objects in the scene to do stuff with 
 	#cube = Cube()
-	tesseract = Hypercube()
+	#tesseract = Hypercube()
 	#cube.scale(100)
-	tesseract.sc4le(150)
+	#tesseract.sc4le(150)
+
+	#fivecell = FiveCell()
+	#fivecell.sc4le(100)
+
+	sixteen = Hexadecachoron()
+	sixteen.sc4le(150)
+
 	# eventually doStuff will pass a whole scene and draw all of the objects there
 	# but for now a cube is good
-	doStuff(tesseract)
+	doStuff(sixteen)
 	mainloop()
 
 if __name__=="__main__":
